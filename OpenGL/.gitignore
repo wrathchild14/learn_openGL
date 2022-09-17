@@ -4,6 +4,7 @@
 # Locally git ignoring
 .vs/OpenGL/v17
 x64/Debug
+.vs/OpenGL/FileContentIndex
 
 # User-specific files
 *.suo
