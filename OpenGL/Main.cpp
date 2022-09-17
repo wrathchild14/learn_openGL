@@ -82,7 +82,7 @@ int main() {
 
 		glfwPollEvents(); // Takes care of all glfw events
 	}
-	
+
 	/// <summary>
 	/// Freeing memory - deconstructors
 	/// </summary>

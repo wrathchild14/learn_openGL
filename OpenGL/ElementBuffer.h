@@ -6,8 +6,6 @@
 class ElementBuffer {
 public:
 	GLuint ID;
-	ElementBuffer(GLfloat* vertices, GLsizeiptr size);
-
 	ElementBuffer(GLuint* vertices, GLsizeiptr size);
 
 	void Bind();

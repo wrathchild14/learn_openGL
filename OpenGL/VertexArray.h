@@ -5,14 +5,14 @@
 #include"VertexBuffer.h"
 
 class VertexArray {
-	public:
-		GLuint ID;
-		VertexArray();
+public:
+	GLuint ID;
+	VertexArray();
 
-		void LinkVertexBuffer(VertexBuffer VBO, GLuint layout);
-		void Bind();
-		void Unbind();
-		void Delete();
+	void LinkVertexBuffer(VertexBuffer VBO, GLuint layout);
+	void Bind();
+	void Unbind();
+	void Delete();
 };
 
 #endif // !VAO_CLASS_H
