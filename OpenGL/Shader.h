@@ -17,6 +17,9 @@ public:
 
 	void Activate();
 	void Delete();
+
+private:
+	void CompileError(GLuint shader, const char* type);
 };
 
 

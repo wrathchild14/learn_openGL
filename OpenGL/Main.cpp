@@ -8,12 +8,8 @@
 #include"ElementBuffer.h"
 
 int main() {
-	/// <summary>
-	/// Set up
-	/// </summary>
-	/// <returns></returns>
 	if (!glfwInit()) {
-		std::cout << "Failed to init GLFW" << std::endl;
+		std::cout << "Log: Failed to initialize GLFW - Terminating..." << std::endl;
 		return -1;
 	}
 
@@ -34,11 +30,6 @@ int main() {
 	// Load glad with openGL configuration
 	gladLoadGL();
 	glViewport(0, 0, 800, 800);
-
-	/// <summary>
-	/// Start of our program
-	/// </summary>
-	/// <returns></returns>
 
 	GLfloat vertices[] = {
 		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,	0.8f, 0.3f, 0.02f, // Lower left corner
@@ -70,24 +61,21 @@ int main() {
 	vertexBufferObject.Unbind();
 	elementBufferObject.Unbind();
 
+	// Getting uniform id for later assigning
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		shaderProgram.Activate();
+		glUniform1f(uniID, 1.5f); // Assign uniforms
+
 		vertexArrayObject.Bind();
-
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0); // Draw elements from the EBO
-		// Swap the back buffer with the front buffer
-		glfwSwapBuffers(window);
-
+		glfwSwapBuffers(window); // Swap the back buffer with the front buffer
 		glfwPollEvents(); // Takes care of all glfw events
 	}
-
-	/// <summary>
-	/// Freeing memory - deconstructors
-	/// </summary>
-	/// <returns></returns>
 
 	vertexArrayObject.Delete();
 	vertexBufferObject.Delete();
