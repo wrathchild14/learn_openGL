@@ -3,9 +3,9 @@
 #include<GLFW/glfw3.h>
 
 #include"Shader.h"
+#include"VertexArray.h"
 #include"VertexBuffer.h"
 #include"ElementBuffer.h"
-#include"VertexArray.h"
 
 int main() {
 	/// <summary>
@@ -41,12 +41,12 @@ int main() {
 	/// <returns></returns>
 
 	GLfloat vertices[] = {
-		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-		-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-		0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-		0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,	0.8f, 0.3f, 0.02f, // Lower left corner
+		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,		0.8f, 0.3f, 0.02f, // Lower right corner
+		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f,	1.0f, 0.6f, 0.32f, // Upper corner
+		-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, 0.9f, 0.45f, 0.17f, // Inner left
+		0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f,	0.9f, 0.45f, 0.17f, // Inner right
+		0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f,		0.8f, 0.3f, 0.02f // Inner down
 	};
 
 	GLuint indices[] = {
@@ -62,8 +62,9 @@ int main() {
 
 	VertexBuffer vertexBufferObject(vertices, sizeof(vertices));
 	ElementBuffer elementBufferObject(indices, sizeof(indices));
-
-	vertexArrayObject.LinkVertexBuffer(vertexBufferObject, 0);
+	
+	vertexArrayObject.LinkAttrib(vertexBufferObject, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+	vertexArrayObject.LinkAttrib(vertexBufferObject, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 
 	vertexArrayObject.Unbind();
 	vertexBufferObject.Unbind();
