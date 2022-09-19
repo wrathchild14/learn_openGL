@@ -1,9 +1,5 @@
 #include "ElementBuffer.h"
 
-ElementBuffer::ElementBuffer(GLfloat* vertices, GLsizeiptr size)
-{
-}
-
 ElementBuffer::ElementBuffer(GLuint* vertices, GLsizeiptr size)
 {
 	glGenBuffers(1, &ID);
