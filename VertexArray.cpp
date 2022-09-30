@@ -5,6 +5,7 @@ VertexArray::VertexArray()
     glGenVertexArrays(1, &ID);
 }
 
+// Binds, sets, enables and unbinds the VBO.
 void VertexArray::LinkAttrib(VertexBuffer vertex_buffer_object, const GLuint layout, const GLuint num_components, const GLenum type,
                              const GLsizei stride, const void* offset)
 {
