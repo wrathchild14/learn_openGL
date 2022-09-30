@@ -5,6 +5,7 @@
 .vs/OpenGL/v17
 x64/Debug
 .vs/OpenGL/FileContentIndex
+.idea
 
 # User-specific files
 *.suo
