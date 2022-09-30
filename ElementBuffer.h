@@ -3,14 +3,15 @@
 
 #include<glad/glad.h>
 
-class ElementBuffer {
+class ElementBuffer
+{
 public:
-	GLuint ID;
-	ElementBuffer(GLuint* vertices, GLsizeiptr size);
+    GLuint ID{};
+    ElementBuffer(const GLuint* vertices, GLsizeiptr size);
 
-	void Bind();
-	void Unbind();
-	void Delete();
+    void Bind() const;
+    void Unbind();
+    void Delete() const;
 };
 
 #endif // !EBO_CLASS_H

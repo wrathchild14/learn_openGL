@@ -2,28 +2,29 @@
 
 VertexArray::VertexArray()
 {
-	glGenVertexArrays(1, &ID);
+    glGenVertexArrays(1, &ID);
 }
 
-void VertexArray::LinkAttrib(VertexBuffer vertexBufferObject, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset)
+void VertexArray::LinkAttrib(VertexBuffer vertex_buffer_object, const GLuint layout, const GLuint num_components, const GLenum type,
+                             const GLsizei stride, const void* offset)
 {
-	vertexBufferObject.Bind();
-	glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
-	glEnableVertexAttribArray(layout);
-	vertexBufferObject.Unbind();
+    vertex_buffer_object.Bind();
+    glVertexAttribPointer(layout, num_components, type, GL_FALSE, stride, offset);
+    glEnableVertexAttribArray(layout);
+    vertex_buffer_object.Unbind();
 }
 
 void VertexArray::Bind()
 {
-	glBindVertexArray(ID);
+    glBindVertexArray(ID);
 }
 
 void VertexArray::Unbind()
 {
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 void VertexArray::Delete()
 {
-	glDeleteVertexArrays(1, &ID);
+    glDeleteVertexArrays(1, &ID);
 }

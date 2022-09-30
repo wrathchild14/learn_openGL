@@ -4,15 +4,16 @@
 #include<glad/glad.h>
 #include"VertexBuffer.h"
 
-class VertexArray {
+class VertexArray
+{
 public:
-	GLuint ID;
-	VertexArray();
-
-	void LinkAttrib(VertexBuffer vertexBufferObject, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
-	void Bind();
-	void Unbind();
-	void Delete();
+    GLuint ID{};
+    VertexArray();
+    void LinkAttrib(VertexBuffer vertex_buffer_object, GLuint layout, GLuint num_components, GLenum type, GLsizei stride,
+                    const void* offset);
+    void Bind();
+    void Unbind();
+    void Delete();
 };
 
 #endif // !VAO_CLASS_H
