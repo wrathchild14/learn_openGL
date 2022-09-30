@@ -7,6 +7,8 @@
 #include"VertexBuffer.h"
 #include"ElementBuffer.h"
 
+#include<stb/stb_image.h>
+
 int main()
 {
     if (!glfwInit())
@@ -34,19 +36,20 @@ int main()
     gladLoadGL();
     glViewport(0, 0, 800, 800);
 
-    GLfloat vertices[] = {
-        -0.5f, -0.5f * static_cast<float>(sqrt(3)) / 3, 0.0f, 0.8f, 0.3f, 0.02f, // Lower left corner
-        0.5f, -0.5f * static_cast<float>(sqrt(3)) / 3, 0.0f, 0.8f, 0.3f, 0.02f, // Lower right corner
-        0.0f, 0.5f * static_cast<float>(sqrt(3)) * 2 / 3, 0.0f, 1.0f, 0.6f, 0.32f, // Upper corner
-        -0.5f / 2, 0.5f * static_cast<float>(sqrt(3)) / 6, 0.0f, 0.9f, 0.45f, 0.17f, // Inner left
-        0.5f / 2, 0.5f * static_cast<float>(sqrt(3)) / 6, 0.0f, 0.9f, 0.45f, 0.17f, // Inner right
-        0.0f, -0.5f * static_cast<float>(sqrt(3)) / 3, 0.0f, 0.8f, 0.3f, 0.02f // Inner down
+    GLfloat vertices[] =
+    {
+        //     COORDINATES     /        COLORS      /   TexCoord  //
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Upper left corner
+        0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Upper right corner
+        0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f // Lower right corner
     };
 
-    GLuint indices[] = {
-        0, 3, 5,
-        3, 2, 4,
-        5, 4, 1
+    // Indices for vertices order
+    GLuint indices[] =
+    {
+        0, 2, 1, // Upper triangle
+        0, 3, 2 // Lower triangle
     };
 
     const Shader shader_program("default.vert", "default.frag");
@@ -57,9 +60,13 @@ int main()
     VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
     ElementBuffer element_buffer_object(indices, sizeof(indices));
 
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), nullptr);
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
-                                   (void*)(3 * sizeof(GLfloat)));
+    // vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), nullptr);
+    // vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
+    //                                (void*)(3 * sizeof(GLfloat)));
+
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
     vertex_array_object.Unbind();
     vertex_buffer_object.Unbind();
@@ -77,7 +84,7 @@ int main()
         glUniform1f(uni_id, 1.5f); // Assign uniforms
 
         vertex_array_object.Bind();
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
         glfwSwapBuffers(window); // Swap the back buffer with the front buffer
         glfwPollEvents(); // Takes care of all glfw events
     }
