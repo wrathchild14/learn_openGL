@@ -3,15 +3,15 @@
 
 #include<glad/glad.h>
 
-class vertex_buffer
+class VertexBuffer
 {
 public:
-    GLuint id{};
-    vertex_buffer(const GLfloat* vertices, GLsizeiptr size);
+    GLuint ID{};
+    VertexBuffer(const GLfloat* vertices, GLsizeiptr size);
 
-    void bind() const;
-    void unbind();
-    void delete_() const;
+    void Bind() const;
+    void Unbind();
+    void Delete() const;
 };
 
 #endif // !VBO_CLASS_H

@@ -52,27 +52,27 @@ int main()
         0, 3, 2 // Lower triangle
     };
 
-    const shader shader_program("default.vert", "default.frag");
+    const Shader shader_program("default.vert", "default.frag");
 
-    vertex_array vertex_array_object;
-    vertex_array_object.bind();
+    VertexArray vertex_array_object;
+    vertex_array_object.Bind();
 
-    vertex_buffer vertex_buffer_object(vertices, sizeof(vertices));
-    element_buffer element_buffer_object(indices, sizeof(indices));
+    VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
+    ElementBuffer element_buffer_object(indices, sizeof(indices));
 
     // vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), nullptr);
     // vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
     //                                (void*)(3 * sizeof(GLfloat)));
 
-    vertex_array_object.link_attrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
-    vertex_array_object.link_attrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
                                    reinterpret_cast<void*>(3 * sizeof(float)));
-    vertex_array_object.link_attrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
+    vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
                                    reinterpret_cast<void*>(6 * sizeof(float)));
 
-    vertex_array_object.unbind();
-    vertex_buffer_object.unbind();
-    element_buffer_object.unbind();
+    vertex_array_object.Unbind();
+    vertex_buffer_object.Unbind();
+    element_buffer_object.Unbind();
 
     // Getting uniform id for later assigning
     const GLuint uni_id = glGetUniformLocation(shader_program.id, "scale");
@@ -102,7 +102,7 @@ int main()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     const GLuint tex0_uni = glGetUniformLocation(shader_program.id, "tex0");
-    shader_program.activate();
+    shader_program.Activate();
     glUniform1i(tex0_uni, 0);
     
     while (!glfwWindowShouldClose(window))
@@ -110,20 +110,20 @@ int main()
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader_program.activate();
+        shader_program.Activate();
         glUniform1f(uni_id, 1.5f); // Assign uniforms
 
         glBindTexture(GL_TEXTURE_2D, texture);
         
-        vertex_array_object.bind();
+        vertex_array_object.Bind();
         
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
         glfwSwapBuffers(window); // Swap the back buffer with the front buffer
         glfwPollEvents(); // Takes care of all glfw events
     }
 
-    vertex_array_object.delete_();
-    vertex_buffer_object.delete_();
+    vertex_array_object.Delete();
+    vertex_buffer_object.Delete();
     element_buffer_object.Delete();
     glDeleteTextures(1, &texture);
 

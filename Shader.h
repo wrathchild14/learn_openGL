@@ -5,19 +5,19 @@
 #include<string>
 #include<sstream>
 
-std::string get_file_content(const char* filename);
+std::string GetFileContent(const char* filename);
 
-class shader
+class Shader
 {
 public:
     GLuint id;
-    shader(const char* vertex_file, const char* fragment_file);
+    Shader(const char* vertex_file, const char* fragment_file);
 
-    void activate() const;
-    void delete_() const;
+    void Activate() const;
+    void Delete() const;
 
 private:
-    void compile_error(GLuint shader, const char* type);
+    void CompileErrors(GLuint shader, const char* type);
 };
 
 

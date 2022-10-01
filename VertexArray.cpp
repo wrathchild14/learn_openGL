@@ -1,32 +1,32 @@
 #include "VertexArray.h"
 
-vertex_array::vertex_array()
+VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &id);
 }
 
 // Binds, sets, enables and unbinds the VBO.
-void vertex_array::link_attrib(vertex_buffer vertex_buffer_object, const GLuint layout, const GLuint num_components,
+void VertexArray::LinkAttrib(VertexBuffer vertex_buffer_object, const GLuint layout, const GLuint num_components,
                              const GLenum type,
                              const GLsizei stride, const void* offset)
 {
-    vertex_buffer_object.bind();
+    vertex_buffer_object.Bind();
     glVertexAttribPointer(layout, num_components, type, GL_FALSE, stride, offset);
     glEnableVertexAttribArray(layout);
-    vertex_buffer_object.unbind();
+    vertex_buffer_object.Unbind();
 }
 
-void vertex_array::bind() const
+void VertexArray::Bind() const
 {
     glBindVertexArray(id);
 }
 
-void vertex_array::unbind()
+void VertexArray::Unbind()
 {
     glBindVertexArray(0);
 }
 
-void vertex_array::delete_() const
+void VertexArray::Delete() const
 {
     glDeleteVertexArrays(1, &id);
 }

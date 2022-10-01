@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-std::string get_file_content(const char* filename)
+std::string GetFileContent(const char* filename)
 {
     std::ifstream in(filename, std::ios::binary);
     if (in)
@@ -19,10 +19,10 @@ std::string get_file_content(const char* filename)
     throw errno;
 }
 
-shader::shader(const char* vertex_file, const char* fragment_file)
+Shader::Shader(const char* vertex_file, const char* fragment_file)
 {
-    const std::string vertex_code = get_file_content(vertex_file);
-    const std::string fragment_code = get_file_content(fragment_file);
+    const std::string vertex_code = GetFileContent(vertex_file);
+    const std::string fragment_code = GetFileContent(fragment_file);
 
     const char* vertex_source = vertex_code.c_str();
     const char* fragment_source = fragment_code.c_str();
@@ -30,34 +30,34 @@ shader::shader(const char* vertex_file, const char* fragment_file)
     const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_source, nullptr);
     glCompileShader(vertex_shader);
-    compile_error(vertex_shader, "VERTEX");
+    CompileErrors(vertex_shader, "VERTEX");
 
     const GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_source, nullptr);
     glCompileShader(fragment_shader);
-    compile_error(fragment_shader, "FRAGMENT");
+    CompileErrors(fragment_shader, "FRAGMENT");
 
     id = glCreateProgram();
     glAttachShader(id, vertex_shader);
     glAttachShader(id, fragment_shader);
     glLinkProgram(id);
-    compile_error(id, "PROGRAM");
+    CompileErrors(id, "PROGRAM");
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 }
 
-void shader::activate() const
+void Shader::Activate() const
 {
     glUseProgram(id);
 }
 
-void shader::delete_() const
+void Shader::Delete() const
 {
     glDeleteProgram(id);
 }
 
-void shader::compile_error(const GLuint shader, const char* type)
+void Shader::CompileErrors(const GLuint shader, const char* type)
 {
     GLint has_compiled;
     char info_log[1024];
