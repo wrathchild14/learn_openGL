@@ -39,10 +39,10 @@ int main()
     GLfloat vertices[] =
     {
         //     COORDINATES     /        COLORS      /   TexCoord  //
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Upper left corner
-        0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Upper right corner
-        0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f // Lower right corner
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,     0.0f, 0.0f, 0.0f, // Lower left corner
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,      0.0f, 0.0f, 1.0f, // Upper left corner
+        0.5f, 0.5f, 0.0f, 0.0f, 0.0f,       1.0f, 1.0f, 1.0f, // Upper right corner
+        0.5f, -0.5f, 0.0f, 1.0f, 1.0f,      1.0f, 1.0f, 0.0f // Lower right corner
     };
 
     // Indices for vertices order
@@ -81,6 +81,30 @@ int main()
     int width_img, height_img, num_col_ch;
     unsigned char* bytes = stbi_load("square_cat.png", &width_img, &height_img, &num_col_ch, 0);
 
+    // The type of GLuint is our pointer to the texture
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // how will be drawn
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // how will it be repeated
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width_img, height_img, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(bytes);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    const GLuint tex0_uni = glGetUniformLocation(shader_program.id, "tex0");
+    shader_program.activate();
+    glUniform1i(tex0_uni, 0);
+    
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -89,7 +113,10 @@ int main()
         shader_program.activate();
         glUniform1f(uni_id, 1.5f); // Assign uniforms
 
+        glBindTexture(GL_TEXTURE_2D, texture);
+        
         vertex_array_object.bind();
+        
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
         glfwSwapBuffers(window); // Swap the back buffer with the front buffer
         glfwPollEvents(); // Takes care of all glfw events
@@ -98,6 +125,7 @@ int main()
     vertex_array_object.delete_();
     vertex_buffer_object.delete_();
     element_buffer_object.Delete();
+    glDeleteTextures(1, &texture);
 
     glfwDestroyWindow(window);
     glfwTerminate();
