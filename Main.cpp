@@ -52,47 +52,47 @@ int main()
         0, 3, 2 // Lower triangle
     };
 
-    const Shader shader_program("default.vert", "default.frag");
+    const shader shader_program("default.vert", "default.frag");
 
-    VertexArray vertex_array_object;
-    vertex_array_object.Bind();
+    vertex_array vertex_array_object;
+    vertex_array_object.bind();
 
-    VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
-    ElementBuffer element_buffer_object(indices, sizeof(indices));
+    vertex_buffer vertex_buffer_object(vertices, sizeof(vertices));
+    element_buffer element_buffer_object(indices, sizeof(indices));
 
     // vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), nullptr);
     // vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
     //                                (void*)(3 * sizeof(GLfloat)));
 
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
+    vertex_array_object.link_attrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
+    vertex_array_object.link_attrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
                                    reinterpret_cast<void*>(3 * sizeof(float)));
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
+    vertex_array_object.link_attrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
                                    reinterpret_cast<void*>(6 * sizeof(float)));
 
-    vertex_array_object.Unbind();
-    vertex_buffer_object.Unbind();
-    element_buffer_object.Unbind();
+    vertex_array_object.unbind();
+    vertex_buffer_object.unbind();
+    element_buffer_object.unbind();
 
     // Getting uniform id for later assigning
-    const GLuint uni_id = glGetUniformLocation(shader_program.ID, "scale");
+    const GLuint uni_id = glGetUniformLocation(shader_program.id, "scale");
 
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader_program.Activate();
+        shader_program.activate();
         glUniform1f(uni_id, 1.5f); // Assign uniforms
 
-        vertex_array_object.Bind();
+        vertex_array_object.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
         glfwSwapBuffers(window); // Swap the back buffer with the front buffer
         glfwPollEvents(); // Takes care of all glfw events
     }
 
-    vertex_array_object.Delete();
-    vertex_buffer_object.Delete();
+    vertex_array_object.delete_();
+    vertex_buffer_object.delete_();
     element_buffer_object.Delete();
 
     glfwDestroyWindow(window);

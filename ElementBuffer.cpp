@@ -1,23 +1,23 @@
 #include "ElementBuffer.h"
 
-ElementBuffer::ElementBuffer(const GLuint* vertices, const GLsizeiptr size)
+element_buffer::element_buffer(const GLuint* vertices, const GLsizeiptr size)
 {
-    glGenBuffers(1, &ID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+    glGenBuffers(1, &id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
-void ElementBuffer::Bind() const
+void element_buffer::bind() const
 {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 }
 
-void ElementBuffer::Unbind()
+void element_buffer::unbind()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void ElementBuffer::Delete() const
+void element_buffer::Delete() const
 {
-    glDeleteBuffers(1, &ID);
+    glDeleteBuffers(1, &id);
 }

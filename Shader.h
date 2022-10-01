@@ -7,17 +7,17 @@
 
 std::string get_file_content(const char* filename);
 
-class Shader
+class shader
 {
 public:
-    GLuint ID;
-    Shader(const char* vertex_file, const char* fragment_file);
+    GLuint id;
+    shader(const char* vertex_file, const char* fragment_file);
 
-    void Activate() const;
-    void Delete() const;
+    void activate() const;
+    void delete_() const;
 
 private:
-    void CompileError(GLuint shader, const char* type);
+    void compile_error(GLuint shader, const char* type);
 };
 
 

@@ -19,7 +19,7 @@ std::string get_file_content(const char* filename)
     throw errno;
 }
 
-Shader::Shader(const char* vertex_file, const char* fragment_file)
+shader::shader(const char* vertex_file, const char* fragment_file)
 {
     const std::string vertex_code = get_file_content(vertex_file);
     const std::string fragment_code = get_file_content(fragment_file);
@@ -30,34 +30,34 @@ Shader::Shader(const char* vertex_file, const char* fragment_file)
     const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_source, nullptr);
     glCompileShader(vertex_shader);
-    CompileError(vertex_shader, "VERTEX");
+    compile_error(vertex_shader, "VERTEX");
 
     const GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_source, nullptr);
     glCompileShader(fragment_shader);
-    CompileError(fragment_shader, "FRAGMENT");
+    compile_error(fragment_shader, "FRAGMENT");
 
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex_shader);
-    glAttachShader(ID, fragment_shader);
-    glLinkProgram(ID);
-    CompileError(ID, "PROGRAM");
+    id = glCreateProgram();
+    glAttachShader(id, vertex_shader);
+    glAttachShader(id, fragment_shader);
+    glLinkProgram(id);
+    compile_error(id, "PROGRAM");
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 }
 
-void Shader::Activate() const
+void shader::activate() const
 {
-    glUseProgram(ID);
+    glUseProgram(id);
 }
 
-void Shader::Delete() const
+void shader::delete_() const
 {
-    glDeleteProgram(ID);
+    glDeleteProgram(id);
 }
 
-void Shader::CompileError(const GLuint shader, const char* type)
+void shader::compile_error(const GLuint shader, const char* type)
 {
     GLint has_compiled;
     char info_log[1024];
