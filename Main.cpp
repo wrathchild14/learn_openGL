@@ -79,6 +79,7 @@ int main()
 
     // Texture
     int width_img, height_img, num_col_ch;
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* bytes = stbi_load("square_cat.png", &width_img, &height_img, &num_col_ch, 0);
 
     // The type of GLuint is our pointer to the texture
