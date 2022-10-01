@@ -77,6 +77,10 @@ int main()
     // Getting uniform id for later assigning
     const GLuint uni_id = glGetUniformLocation(shader_program.id, "scale");
 
+    // Texture
+    int width_img, height_img, num_col_ch;
+    unsigned char* bytes = stbi_load("square_cat.png", &width_img, &height_img, &num_col_ch, 0);
+
     while (!glfwWindowShouldClose(window))
     {
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
