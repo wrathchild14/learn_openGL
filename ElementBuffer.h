@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef EBO_CLASS_H
 #define EBO_CLASS_H
 
