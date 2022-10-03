@@ -30,7 +30,7 @@ Texture::Texture(const char* image, GLenum tex_type, GLenum slot, GLenum format,
 
 void Texture::TexUnit(Shader& shader, const char* uniform, GLuint unit)
 {
-	const GLuint tex_uniform = glGetUniformLocation(shader.id, uniform);
+	const GLuint tex_uniform = glGetUniformLocation(shader.ID, uniform);
 	shader.Activate();
 	glUniform1i(tex_uniform, unit);
 }
