@@ -11,6 +11,7 @@
 #include"VertexBuffer.h"
 #include"ElementBuffer.h"
 #include"Texture.h"
+#include"Camera.h"
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
@@ -81,19 +82,14 @@ int main()
 	vertex_buffer_object.Unbind();
 	element_buffer_object.Unbind();
 
-	// Getting uniform id for later assigning
-	const GLuint uni_id = glGetUniformLocation(shader_program.ID, "scale");
-
 	// Texture
 	Texture cat_texture("square_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	cat_texture.TexUnit(shader_program, "tex0", 0);
 
-	// Rotatate model matrix
-	float rotation = 0.0f;
-	double prev_time = glfwGetTime();
-
 	// Get rid of 3D drawing glithces
 	glEnable(GL_DEPTH_TEST);
+
+	Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -101,33 +97,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Depth buffer got to be cleared as well
 
 		shader_program.Activate();
-		glUniform1f(uni_id, 1.5f); // Assign uniforms
 
-		double current_time = glfwGetTime();
-		if (current_time - prev_time >= 1 / 60) {
-			rotation += 0.25f;
-			prev_time = current_time;
-		}
-
-		// Init matrices, activate shader before assigning
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
-
-		// Assign values to each matrix
-		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.4f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.4f, -2.0f));
-		proj = glm::perspective(glm::radians(45.0f), (float)(WIDTH / HEIGHT), 0.1f, 100.f);
-
-		int model_loc = glGetUniformLocation(shader_program.ID, "model");
-		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
-
-		int view_loc = glGetUniformLocation(shader_program.ID, "view");
-		glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
-
-		int proj_loc = glGetUniformLocation(shader_program.ID, "proj");
-		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(proj));
-
+		camera.Matrix(45.0f, 0.1f, 100.0f, shader_program, "camMatrix");
 
 		cat_texture.Bind();
 		vertex_array_object.Bind();
