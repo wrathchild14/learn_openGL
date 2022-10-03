@@ -61,15 +61,11 @@ int main()
 	VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
 	ElementBuffer element_buffer_object(indices, sizeof(indices));
 
-	// vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), nullptr);
-	// vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
-	//                                (void*)(3 * sizeof(GLfloat)));
-
 	vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
 	vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
-		reinterpret_cast<void*>(3 * sizeof(float)));
+		(void*)(3 * sizeof(float)));
 	vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
-		reinterpret_cast<void*>(6 * sizeof(float)));
+		(void*)(6 * sizeof(float)));
 
 	vertex_array_object.Unbind();
 	vertex_buffer_object.Unbind();
@@ -81,7 +77,6 @@ int main()
 	// Texture
 	Texture cat_texture("square_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	cat_texture.TexUnit(shader_program, "tex0", 0);
-
 
 	while (!glfwWindowShouldClose(window))
 	{
