@@ -12,6 +12,9 @@
 #include"ElementBuffer.h"
 #include"Texture.h"
 
+int WIDTH = 800;
+int HEIGHT = 800;
+
 int main()
 {
 	if (!glfwInit())
@@ -26,7 +29,7 @@ int main()
 	// Using the core profile, so that means we only have modern functions
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "OpenGL", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -37,7 +40,7 @@ int main()
 	glfwMakeContextCurrent(window);
 	// Load glad with openGL configuration
 	gladLoadGL();
-	glViewport(0, 0, 800, 800);
+	glViewport(0, 0, WIDTH, HEIGHT);
 
 	GLfloat vertices[] =
 	{
@@ -74,7 +77,7 @@ int main()
 	element_buffer_object.Unbind();
 
 	// Getting uniform id for later assigning
-	const GLuint uni_id = glGetUniformLocation(shader_program.id, "scale");
+	const GLuint uni_id = glGetUniformLocation(shader_program.ID, "scale");
 
 	// Texture
 	Texture cat_texture("square_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
@@ -87,6 +90,23 @@ int main()
 
 		shader_program.Activate();
 		glUniform1f(uni_id, 1.5f); // Assign uniforms
+
+		// Matrices, activate shader before assigning
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 proj = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+		proj = glm::perspective(glm::radians(45.0f), (float)(WIDTH / HEIGHT), 0.1f, 100.f);
+
+		int model_loc = glGetUniformLocation(shader_program.ID, "model");
+		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model));
+
+		int view_loc = glGetUniformLocation(shader_program.ID, "view");
+		glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm::value_ptr(view));
+
+		int proj_loc = glGetUniformLocation(shader_program.ID, "proj");
+		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(proj));
+
 
 		cat_texture.Bind();
 		vertex_array_object.Bind();
