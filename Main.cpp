@@ -53,7 +53,7 @@ int main()
 		0, 3, 2 // Lower triangle
 	};
 
-	const Shader shader_program("default.vert", "default.frag");
+	Shader shader_program("default.vert", "default.frag");
 
 	VertexArray vertex_array_object;
 	vertex_array_object.Bind();

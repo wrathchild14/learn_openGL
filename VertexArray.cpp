@@ -2,11 +2,11 @@
 
 VertexArray::VertexArray()
 {
-	glGenVertexArrays(1, &id);
+	glGenVertexArrays(1, &ID);
 }
 
 // Binds, sets, enables and unbinds the VBO.
-void VertexArray::LinkAttrib(VertexBuffer vertex_buffer_object, const GLuint layout, const GLuint num_components,
+void VertexArray::LinkAttrib(VertexBuffer& vertex_buffer_object, const GLuint layout, const GLuint num_components,
 	const GLenum type,
 	const GLsizei stride, const void* offset)
 {
@@ -18,7 +18,7 @@ void VertexArray::LinkAttrib(VertexBuffer vertex_buffer_object, const GLuint lay
 
 void VertexArray::Bind() const
 {
-	glBindVertexArray(id);
+	glBindVertexArray(ID);
 }
 
 void VertexArray::Unbind()
@@ -28,5 +28,5 @@ void VertexArray::Unbind()
 
 void VertexArray::Delete() const
 {
-	glDeleteVertexArrays(1, &id);
+	glDeleteVertexArrays(1, &ID);
 }
