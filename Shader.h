@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef SHADER_CLASS_H
-#define SHADER_CLASS_H
-
 #include<glad/glad.h>
 #include<string>
 #include<sstream>
@@ -21,6 +18,3 @@ public:
 private:
 	void CompileErrors(GLuint shader, const char* type);
 };
-
-
-#endif // !SHADER_CLASS_H

@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef EBO_CLASS_H
-#define EBO_CLASS_H
-
 #include<glad/glad.h>
 
 class ElementBuffer
@@ -15,5 +12,3 @@ public:
 	void Unbind();
 	void Delete() const;
 };
-
-#endif // !EBO_CLASS_H

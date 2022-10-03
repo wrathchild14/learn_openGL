@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef TEXTURE_CLASS_H
-#define TEXTURE_CLASS_H
-
 #include<glad/glad.h>
 #include<stb/stb_image.h>
 
@@ -20,5 +17,3 @@ public:
 	void Unbind();
 	void Delete();
 };
-
-#endif // !TEXTURE_CLASS_H
