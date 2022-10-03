@@ -12,8 +12,8 @@
 #include"ElementBuffer.h"
 #include"Texture.h"
 
-int WIDTH = 800;
-int HEIGHT = 800;
+const int WIDTH = 800;
+const int HEIGHT = 800;
 
 int main()
 {
@@ -42,20 +42,25 @@ int main()
 	gladLoadGL();
 	glViewport(0, 0, WIDTH, HEIGHT);
 
+	// Vertices coordinates
 	GLfloat vertices[] =
-	{
-		//     COORDINATES     /        COLORS      /   TexCoord  //
-		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f,     0.0f, 0.0f, 0.0f, // Lower left corner
-		-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,      0.0f, 0.0f, 1.0f, // Upper left corner
-		0.5f, 0.5f, 0.0f, 0.0f, 0.0f,       1.0f, 1.0f, 1.0f, // Upper right corner
-		0.5f, -0.5f, 0.0f, 1.0f, 1.0f,      1.0f, 1.0f, 0.0f // Lower right corner
+	{ //     COORDINATES     /        COLORS      /   TexCoord  //
+		-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+		-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+		 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
+		 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
 	};
 
 	// Indices for vertices order
 	GLuint indices[] =
 	{
-		0, 2, 1, // Upper triangle
-		0, 3, 2 // Lower triangle
+		0, 1, 2,
+		0, 2, 3,
+		0, 1, 4,
+		1, 2, 4,
+		2, 3, 4,
+		3, 0, 4
 	};
 
 	Shader shader_program("default.vert", "default.frag");
@@ -83,19 +88,35 @@ int main()
 	Texture cat_texture("square_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	cat_texture.TexUnit(shader_program, "tex0", 0);
 
+	// Rotatate model matrix
+	float rotation = 0.0f;
+	double prev_time = glfwGetTime();
+
+	// Get rid of 3D drawing glithces
+	glEnable(GL_DEPTH_TEST);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Depth buffer got to be cleared as well
 
 		shader_program.Activate();
 		glUniform1f(uni_id, 1.5f); // Assign uniforms
 
-		// Matrices, activate shader before assigning
+		double current_time = glfwGetTime();
+		if (current_time - prev_time >= 1 / 60) {
+			rotation += 0.25f;
+			prev_time = current_time;
+		}
+
+		// Init matrices, activate shader before assigning
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 proj = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+
+		// Assign values to each matrix
+		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.4f, 1.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, -0.4f, -2.0f));
 		proj = glm::perspective(glm::radians(45.0f), (float)(WIDTH / HEIGHT), 0.1f, 100.f);
 
 		int model_loc = glGetUniformLocation(shader_program.ID, "model");
@@ -111,7 +132,7 @@ int main()
 		cat_texture.Bind();
 		vertex_array_object.Bind();
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
+		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
 		glfwSwapBuffers(window); // Swap the back buffer with the front buffer
 		glfwPollEvents(); // Takes care of all glfw events
 	}
