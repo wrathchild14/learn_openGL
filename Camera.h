@@ -20,13 +20,15 @@ public:
 
 private:
 	int m_Width;
-	int m_Weight;
+	int m_Height;
 
 	glm::vec3 m_Position;
 	glm::vec3 m_Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	float m_Speed = 0.1f;
-	float m_Sensitivity = 100.0f;
+	float m_Speed = 0.05f;
+	float m_Sensitivity = 50.0f;
+
+	bool m_First_click = false;
 };
 

@@ -13,7 +13,7 @@
 #include"Texture.h"
 #include"Camera.h"
 
-const int WIDTH = 800;
+const int WIDTH = 1200;
 const int HEIGHT = 800;
 
 int main()
@@ -98,6 +98,7 @@ int main()
 
 		shader_program.Activate();
 
+		camera.Inputs(window);
 		camera.Matrix(45.0f, 0.1f, 100.0f, shader_program, "camMatrix");
 
 		cat_texture.Bind();
