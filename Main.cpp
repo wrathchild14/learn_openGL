@@ -13,7 +13,7 @@
 #include"Texture.h"
 #include"Camera.h"
 
-const int WIDTH = 1200;
+const int WIDTH = 800;
 const int HEIGHT = 800;
 
 int main()
