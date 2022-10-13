@@ -13,8 +13,8 @@
 #include"Texture.h"
 #include"Camera.h"
 
-const int WIDTH = 800;
-const int HEIGHT = 800;
+constexpr int WIDTH = 800;
+constexpr int HEIGHT = 800;
 
 int main()
 {
@@ -86,7 +86,7 @@ int main()
 	Texture cat_texture("square_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	cat_texture.TexUnit(shader_program, "tex0", 0);
 
-	// Get rid of 3D drawing glithces
+	// Get rid of 3D drawing glitches
 	glEnable(GL_DEPTH_TEST);
 
 	Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
