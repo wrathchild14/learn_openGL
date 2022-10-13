@@ -99,7 +99,8 @@ int main()
 		shader_program.Activate();
 
 		camera.Inputs(window);
-		camera.Matrix(45.0f, 0.1f, 100.0f, shader_program, "camMatrix");
+		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);
+		camera.Matrix(shader_program, "camMatrix");
 
 		cat_texture.Bind();
 		vertex_array_object.Bind();
