@@ -7,12 +7,12 @@ Camera::Camera(int width, int height, glm::vec3 position)
 	m_Position = position;
 }
 
-glm::vec3 Camera::GetPosition()
+glm::vec3 Camera::GetPosition() const
 {
 	return m_Position;
 }
 
-void Camera::Matrix(Shader& shader, const char* uniform)
+void Camera::Matrix(const Shader& shader, const char* uniform)
 {
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(m_CameraMatrix));
 }

@@ -139,14 +139,14 @@ int main()
 
 	light_vertex_array.LinkAttrib(light_buffer_object, 0, 3, GL_FLOAT, 3 * sizeof(GL_FLOAT), (void*)0);
 
-	glm::vec4 light_color = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::mat4 light_model = glm::mat4(1.0f);
-	light_model = glm::translate(light_model, light_pos); // Gives the matrix a position
+	auto light_color = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
+	auto light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
+	auto light_model = glm::mat4(1.0f);
+	light_model = translate(light_model, light_pos); // Gives the matrix a position
 
-	glm::vec3 pyramid_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::mat4 pyramid_model = glm::mat4(1.0f);
-	pyramid_model = glm::translate(pyramid_model, pyramid_pos);
+	auto pyramid_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	auto pyramid_model = glm::mat4(1.0f);
+	pyramid_model = translate(pyramid_model, pyramid_pos);
 
 	light_shader.Activate();
 	glad_glUniformMatrix4fv(glGetUniformLocation(light_shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(light_model));
