@@ -121,7 +121,6 @@ int main()
 
 	light_vertex_array.LinkAttrib(light_buffer_object, 0, 3, GL_FLOAT, 3 * sizeof(GL_FLOAT), (void*)0);
 
-	// Hard coded setting values
 	glm::vec3 light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::mat4 light_model = glm::mat4(1.0f);
 	light_model = glm::translate(light_model, light_pos); // Gives the matrix a position
@@ -153,7 +152,7 @@ int main()
 		shader_program.Activate();
 
 		camera.Inputs(window);
-		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);
+		camera.UpdateMatrix(60.0f, 0.1f, 100.0f);
 		camera.Matrix(shader_program, "camMatrix");
 
 		cat_texture.Bind();

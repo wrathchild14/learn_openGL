@@ -1,5 +1,4 @@
 #version 330 core
-// Positions and coordinates
 layout (location = 0) in vec3 aPos;
 
 uniform mat4 model;

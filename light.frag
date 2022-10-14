@@ -1,5 +1,5 @@
 #version 330 core
-out vec4 FragColor; // needs to be 4 rows because of alpha
+out vec4 FragColor;
 
 void main()
 {

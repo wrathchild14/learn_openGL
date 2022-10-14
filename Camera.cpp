@@ -59,10 +59,8 @@ void Camera::Inputs(GLFWwindow* window)
 		m_Speed = 0.005f;
 	}
 
-	// Handles mouse inputs
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		// Hides mouse cursor
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 		// Prevents camera from jumping on the first click
@@ -72,10 +70,8 @@ void Camera::Inputs(GLFWwindow* window)
 			m_First_click = false;
 		}
 
-		// Stores the coordinates of the cursor
 		double mouseX;
 		double mouseY;
-		// Fetches the coordinates of the cursor
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
 		// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
@@ -100,7 +96,6 @@ void Camera::Inputs(GLFWwindow* window)
 	}
 	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
-		// Unhides cursor since camera is not looking around anymore
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// Makes sure the next time the camera looks around it doesn't jump
 		m_First_click = true;
