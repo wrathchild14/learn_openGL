@@ -174,6 +174,9 @@ int main()
 
 		shader_program.Activate();
 
+		const auto& camera_position = camera.GetPosition();
+		glUniform3f(glad_glGetUniformLocation(shader_program.ID, "camPos"), camera_position.x, camera_position.y, camera_position.z);
+
 		camera.Inputs(window);
 		camera.UpdateMatrix(60.0f, 0.1f, 100.0f);
 		camera.Matrix(shader_program, "camMatrix");

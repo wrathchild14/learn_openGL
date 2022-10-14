@@ -15,6 +15,8 @@ class Camera
 public:
 	Camera(int width, int height, glm::vec3 position);
 
+	glm::vec3 GetPosition();
+
 	void Matrix(Shader& shader, const char* uniform);
 	void UpdateMatrix(float fov_deg, float near_plane, float far_plane);
 	void Inputs(GLFWwindow* widnow);
