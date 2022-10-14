@@ -43,25 +43,41 @@ int main()
 	gladLoadGL();
 	glViewport(0, 0, WIDTH, HEIGHT);
 
+	// Face normals (|) and vertex normals (smoother)
+	// We go with the face normal (flat shading)
 	// Vertices coordinates
 	GLfloat vertices[] =
-	{ //     COORDINATES     /        COLORS      /   TexCoord  //
-		-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-		-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-		 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-		 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
+	{ //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
+		-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+		-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+		 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+		 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+
+		-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+		-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+
+		-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+		 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+
+		 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+		 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+
+		 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+		-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
 	};
 
-	// Indices for vertices order
 	GLuint indices[] =
 	{
-		0, 1, 2,
-		0, 2, 3,
-		0, 1, 4,
-		1, 2, 4,
-		2, 3, 4,
-		3, 0, 4
+		0, 1, 2, // Bottom side
+		0, 2, 3, // Bottom side
+		4, 6, 5, // Left side
+		7, 9, 8, // Non-facing side
+		10, 12, 11, // Right side
+		13, 15, 14 // Facing side
 	};
 
 	GLfloat light_vertices[] =
@@ -100,11 +116,13 @@ int main()
 	VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
 	ElementBuffer element_buffer_object(indices, sizeof(indices));
 
-	vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 8 * sizeof(float), nullptr);
-	vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 8 * sizeof(float),
+	vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 11 * sizeof(float), nullptr);
+	vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 11 * sizeof(float),
 		(void*)(3 * sizeof(float)));
-	vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 8 * sizeof(float),
+	vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 11 * sizeof(float),
 		(void*)(6 * sizeof(float)));
+	vertex_array_object.LinkAttrib(vertex_buffer_object, 3, 3, GL_FLOAT, 11 * sizeof(float),
+		(void*)(8 * sizeof(float)));
 
 	vertex_array_object.Unbind();
 	vertex_buffer_object.Unbind();
@@ -121,7 +139,7 @@ int main()
 
 	light_vertex_array.LinkAttrib(light_buffer_object, 0, 3, GL_FLOAT, 3 * sizeof(GL_FLOAT), (void*)0);
 
-	glm::vec4 light_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec4 light_color = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
 	glm::vec3 light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::mat4 light_model = glm::mat4(1.0f);
 	light_model = glm::translate(light_model, light_pos); // Gives the matrix a position
@@ -136,6 +154,8 @@ int main()
 	shader_program.Activate();
 	glUniformMatrix4fv(glGetUniformLocation(shader_program.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramid_model));
 	glad_glUniform4f(glGetUniformLocation(shader_program.ID, "lightColor"), light_color.x, light_color.y, light_color.z, light_color.w);
+	
+	glad_glUniform3f(glGetUniformLocation(shader_program.ID, "lightPos"), light_pos.x, light_pos.y, light_pos.z);
 
 
 	// Texture
