@@ -20,4 +20,4 @@ void main()
     color = aColor;
     texCoord = aTex;
     Normal = aNormal;
-};
+}
