@@ -17,13 +17,11 @@ void Camera::Matrix(const Shader& shader, const char* uniform)
     glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, value_ptr(m_CameraMatrix));
 }
 
-void Camera::UpdateMatrix(float fov_deg, float near_plane, float far_plane)
+void Camera::UpdateMatrix(const float fov_deg, const float near_plane, const float far_plane)
 {
-    auto view = glm::mat4(1.0f);
-    auto proj = glm::mat4(1.0f);
-
-    view = lookAt(m_Position, m_Position + m_Orientation, m_Up);
-    proj = glm::perspective(glm::radians(fov_deg), static_cast<float>(m_Width / m_Height), near_plane, far_plane);
+    const auto view = lookAt(m_Position, m_Position + m_Orientation, m_Up);
+    const auto proj = glm::perspective(glm::radians(fov_deg), static_cast<float>(m_Width / m_Height), near_plane,
+                                       far_plane);
 
     m_CameraMatrix = proj * view;
 }
