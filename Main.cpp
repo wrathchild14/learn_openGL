@@ -94,7 +94,7 @@ int main()
 	VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
 	ElementBuffer element_buffer_object(indices, sizeof(indices));
 
-	vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 11 * sizeof(float), nullptr);
+	vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 11 * sizeof(float), 0);
 	vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 11 * sizeof(float),
 		(void*)(3 * sizeof(float)));
 	vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 11 * sizeof(float),
@@ -117,6 +117,10 @@ int main()
 
 	light_vertex_array.LinkAttrib(light_buffer_object, 0, 3, GL_FLOAT, 3 * sizeof(GL_FLOAT), (void*)0);
 
+	light_vertex_array.Unbind();
+	light_buffer_object.Unbind();
+	light_element_object.Unbind();
+
 	auto light_color = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
 	auto light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
 	auto light_model = glm::mat4(1.0f);
@@ -132,7 +136,6 @@ int main()
 	shader_program.Activate();
 	glUniformMatrix4fv(glGetUniformLocation(shader_program.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramid_model));
 	glad_glUniform4f(glGetUniformLocation(shader_program.ID, "lightColor"), light_color.x, light_color.y, light_color.z, light_color.w);
-	
 	glad_glUniform3f(glGetUniformLocation(shader_program.ID, "lightPos"), light_pos.x, light_pos.y, light_pos.z);
 
 
@@ -141,7 +144,7 @@ int main()
 	Texture wood_spec_tex("woodSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
 	wood_tex.TexUnit(shader_program, "tex1", 1);
 
-	// Get rid of 3D drawing glitches
+	// get rid of drawing on top of structures
 	glEnable(GL_DEPTH_TEST);
 
 	Camera camera(WIDTH, HEIGHT, glm::vec3(0.0f, 0.0f, 5.0f));
@@ -164,12 +167,12 @@ int main()
 		wood_spec_tex.Bind();
 		vertex_array_object.Bind();
 
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr); // Draw elements from the EBO
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0); // Draw elements from the EBO
 
 		light_shader.Activate();
 		camera.Matrix(light_shader, "camMatrix");
 		light_vertex_array.Bind();
-		glDrawElements(GL_TRIANGLES, sizeof(light_indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, sizeof(light_indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); // Swap the back buffer with the front buffer
 		glfwPollEvents(); // Takes care of all glfw events
@@ -178,7 +181,17 @@ int main()
 	vertex_array_object.Delete();
 	vertex_buffer_object.Delete();
 	element_buffer_object.Delete();
+
 	wood_tex.Delete();
+	wood_spec_tex.Delete();
+
+	shader_program.Delete();
+	
+	light_vertex_array.Delete();
+	light_element_object.Delete();
+	light_buffer_object.Delete();
+
+	light_shader.Delete();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
