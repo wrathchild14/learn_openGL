@@ -81,5 +81,17 @@
     <Image Include="square_cat.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="box.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="box_specular.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="wood.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="woodSpec.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

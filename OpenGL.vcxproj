@@ -160,6 +160,10 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="box.png" />
+    <Image Include="box_specular.png" />
+    <Image Include="wood.png" />
+    <Image Include="woodSpec.png" />
     <Image Include="square_cat.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

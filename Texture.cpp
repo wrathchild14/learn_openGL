@@ -1,8 +1,8 @@
 #include "Texture.h"
 
-Texture::Texture(const char* image, GLenum tex_type, GLenum slot, GLenum format, GLenum pixel_type)
+Texture::Texture(const char* image, GLenum tex_type, GLuint slot, GLenum format, GLenum pixel_type)
 {
-	type = tex_type;
+	m_Type = tex_type;
 
 	int width_img, height_img, num_col_ch;
 	stbi_set_flip_vertically_on_load(true);
@@ -10,7 +10,8 @@ Texture::Texture(const char* image, GLenum tex_type, GLenum slot, GLenum format,
 
 	// The type of GLuint is our pointer to the texture
 	glGenTextures(1, &ID);
-	glActiveTexture(slot);
+	glActiveTexture(GL_TEXTURE0 + slot);
+	m_Uint = slot;
 	glBindTexture(tex_type, ID);
 
 	// how will be drawn
@@ -37,12 +38,13 @@ void Texture::TexUnit(Shader& shader, const char* uniform, GLuint unit)
 
 void Texture::Bind()
 {
-	glBindTexture(type, ID);
+	glActiveTexture(GL_TEXTURE0 + m_Uint);
+	glBindTexture(m_Type, ID);
 }
 
 void Texture::Unbind()
 {
-	glBindTexture(type, 0);
+	glBindTexture(m_Type, 0);
 }
 
 void Texture::Delete()
