@@ -8,15 +8,15 @@
 class Texture
 {
 public:
-	GLuint ID{};
-	
-	Texture(const char* image, GLenum tex_type, GLuint slot, GLenum format, GLenum pixel_type);
+    GLuint ID{};
 
-	void TexUnit(Shader& shader, const char* uniform, GLuint unit);
-	void Bind();
-	void Unbind();
-	void Delete();
+    Texture(const char* image, GLenum tex_type, GLuint slot, GLenum format, GLenum pixel_type);
+
+    void TexUnit(Shader& shader, const char* uniform, GLuint unit);
+    void Bind();
+    void Unbind();
+    void Delete();
 private:
-	GLenum m_Type;
-	GLuint m_Uint;
+    GLenum m_Type;
+    GLuint m_Uint;
 };
