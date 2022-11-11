@@ -121,7 +121,7 @@ int main()
 	light_buffer_object.Unbind();
 	light_element_object.Unbind();
 
-	auto light_color = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
+	auto light_color = glm::vec4(0.85f, 1.0f, 1.0f, 1.0f);
 	auto light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
 	auto light_model = glm::mat4(1.0f);
 	light_model = translate(light_model, light_pos); // Gives the matrix a position
