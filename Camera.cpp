@@ -30,6 +30,11 @@ void Camera::UpdateMatrix(float fov_deg, float near_plane, float far_plane)
 
 void Camera::Inputs(GLFWwindow* window)
 {
+	// esc for close
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
+
 	// Handles key inputs
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
