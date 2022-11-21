@@ -1,10 +1,10 @@
 #include "ElementBuffer.h"
 
-ElementBuffer::ElementBuffer(const GLuint* vertices, const GLsizeiptr size)
+ElementBuffer::ElementBuffer(const std::vector<GLuint>& indices)
 {
     glGenBuffers(1, &id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
 void ElementBuffer::Bind() const

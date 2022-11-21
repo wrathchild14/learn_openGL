@@ -1,17 +1,6 @@
-#include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include<stb/stb_image.h>
-#include<glm/glm.hpp>
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
+#include <iostream>
 
-#include"Shader.h"
-#include"VertexArray.h"
-#include"VertexBuffer.h"
-#include"ElementBuffer.h"
-#include"Texture.h"
-#include"Camera.h"
+#include "Mesh.h"
 
 constexpr int WIDTH = 800;
 constexpr int HEIGHT = 800;
@@ -43,13 +32,13 @@ int main()
     gladLoadGL();
     glViewport(0, 0, WIDTH, HEIGHT);
 
-    GLfloat vertices[] =
+    // Vertices coordinates
+    Vertex vertices[] =
     {
-        //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
-        -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f
+        Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+        Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+        Vertex{glm::vec3( 1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+        Vertex{glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
     };
 
     // Indices for vertices order
@@ -59,17 +48,16 @@ int main()
         0, 2, 3
     };
 
-    GLfloat light_vertices[] =
+    Vertex lightVertices[] =
     {
-        //     COORDINATES     //
-        -0.1f, -0.1f, 0.1f,
-        -0.1f, -0.1f, -0.1f,
-        0.1f, -0.1f, -0.1f,
-        0.1f, -0.1f, 0.1f,
-        -0.1f, 0.1f, 0.1f,
-        -0.1f, 0.1f, -0.1f,
-        0.1f, 0.1f, -0.1f,
-        0.1f, 0.1f, 0.1f
+        Vertex{glm::vec3(-0.1f, -0.1f, 0.1f)},
+        Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
+        Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
+        Vertex{glm::vec3(0.1f, -0.1f, 0.1f)},
+        Vertex{glm::vec3(-0.1f, 0.1f, 0.1f)},
+        Vertex{glm::vec3(-0.1f, 0.1f, -0.1f)},
+        Vertex{glm::vec3(0.1f, 0.1f, -0.1f)},
+        Vertex{glm::vec3(0.1f, 0.1f, 0.1f)}
     };
 
     GLuint light_indices[] =
@@ -88,40 +76,24 @@ int main()
         4, 6, 7
     };
 
+    Texture textures[]
+    {
+        Texture("wood.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("woodSpec.png", "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
+    };
+
     Shader shader_program("default.vert", "default.frag");
+    std::vector<Vertex> verts(vertices, vertices + sizeof(vertices) / sizeof(Vertex));
+    std::vector<GLuint> ind(indices, indices + sizeof(indices) / sizeof(GLuint));
+    std::vector<Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
+    // Create floor mesh
+    Mesh floor(verts, ind, tex);
 
-    VertexArray vertex_array_object;
-    vertex_array_object.Bind();
-
-    VertexBuffer vertex_buffer_object(vertices, sizeof(vertices));
-    ElementBuffer element_buffer_object(indices, sizeof(indices));
-
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 0, 3, GL_FLOAT, 11 * sizeof(float), nullptr);
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 1, 3, GL_FLOAT, 11 * sizeof(float),
-                                   (void*)(3 * sizeof(float)));
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 2, 2, GL_FLOAT, 11 * sizeof(float),
-                                   (void*)(6 * sizeof(float)));
-    vertex_array_object.LinkAttrib(vertex_buffer_object, 3, 3, GL_FLOAT, 11 * sizeof(float),
-                                   (void*)(8 * sizeof(float)));
-
-    vertex_array_object.Unbind();
-    vertex_buffer_object.Unbind();
-    element_buffer_object.Unbind();
-
-    // Lights shader
     Shader light_shader("light.vert", "light.frag");
-
-    VertexArray light_vertex_array;
-    light_vertex_array.Bind();
-
-    VertexBuffer light_buffer_object(light_vertices, sizeof(light_vertices));
-    ElementBuffer light_element_object(light_indices, sizeof(light_indices));
-
-    light_vertex_array.LinkAttrib(light_buffer_object, 0, 3, GL_FLOAT, 3 * sizeof(GL_FLOAT), nullptr);
-
-    light_vertex_array.Unbind();
-    light_buffer_object.Unbind();
-    light_element_object.Unbind();
+    std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
+    std::vector<GLuint> lightInd(light_indices, light_indices + sizeof(light_indices) / sizeof(GLuint));
+    // Crate light mesh
+    Mesh light(lightVerts, lightInd, tex);
 
     auto light_color = glm::vec4(0.85f, 1.0f, 1.0f, 1.0f);
     auto light_pos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -143,11 +115,6 @@ int main()
     glad_glUniform3f(glGetUniformLocation(shader_program.ID, "lightPos"), light_pos.x, light_pos.y, light_pos.z);
 
 
-    Texture wood_tex("wood.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-    wood_tex.TexUnit(shader_program, "tex0", 0);
-    Texture wood_spec_tex("woodSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
-    wood_tex.TexUnit(shader_program, "tex1", 1);
-
     // get rid of drawing on top of structures
     glEnable(GL_DEPTH_TEST);
 
@@ -168,35 +135,14 @@ int main()
         camera.UpdateMatrix(60.0f, 0.1f, 100.0f);
         camera.Matrix(shader_program, "camMatrix");
 
-        wood_tex.Bind();
-        wood_spec_tex.Bind();
-        vertex_array_object.Bind();
-
-        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
-        // Draw elements from the EBO
-
-        light_shader.Activate();
-        camera.Matrix(light_shader, "camMatrix");
-        light_vertex_array.Bind();
-        glDrawElements(GL_TRIANGLES, sizeof(light_indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
+        floor.Draw(shader_program, camera);
+        light.Draw(light_shader, camera);
 
         glfwSwapBuffers(window); // Swap the back buffer with the front buffer
         glfwPollEvents(); // Takes care of all glfw events
     }
 
-    vertex_array_object.Delete();
-    vertex_buffer_object.Delete();
-    element_buffer_object.Delete();
-
-    wood_tex.Delete();
-    wood_spec_tex.Delete();
-
     shader_program.Delete();
-
-    light_vertex_array.Delete();
-    light_element_object.Delete();
-    light_buffer_object.Delete();
-
     light_shader.Delete();
 
     glfwDestroyWindow(window);

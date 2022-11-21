@@ -1,8 +1,7 @@
 #pragma once
 
+#include <string>
 #include<glad/glad.h>
-#include<string>
-#include<sstream>
 
 std::string GetFileContent(const char* filename);
 
