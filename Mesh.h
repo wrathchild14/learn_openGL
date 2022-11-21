@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <glad/glad.h>
-#include <string>
 
 #include "Camera.h"
 #include "Texture.h"
