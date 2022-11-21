@@ -2,8 +2,8 @@
 
 #include "Mesh.h"
 
-constexpr int WIDTH = 800;
-constexpr int HEIGHT = 800;
+constexpr int WIDTH = 1200;
+constexpr int HEIGHT = 1000;
 
 int main()
 {
@@ -132,7 +132,7 @@ int main()
                     camera_position.z);
 
         camera.Inputs(window);
-        camera.UpdateMatrix(60.0f, 0.1f, 100.0f);
+        camera.UpdateMatrix(70.0f, 0.01f, 100.0f);
         camera.Matrix(shader_program, "camMatrix");
 
         floor.Draw(shader_program, camera);
