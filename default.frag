@@ -31,7 +31,7 @@ vec4 pointLight()
     // Diffused lighting, can be negative - using max() 
     float diffuse = max(dot(normal, lightDirection), 0.0);
 
-    float specularIntensity = 0.5;// Maximum intesity
+    float specularIntensity = 0.5; // Maximum intesity
     vec3 viewDirection = normalize(camPos - currentPos);
     vec3 reflectionDirection = reflect(-lightDirection, normal);
     float specularAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0), 16);
