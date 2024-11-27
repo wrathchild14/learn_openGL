@@ -113,7 +113,7 @@ int main()
 
 	auto pyramid_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 	auto pyramid_model = glm::mat4(1.0f);
-	pyramid_model = translate(pyramid_model, pyramid_pos);
+	pyramid_model = scale(translate(pyramid_model, pyramid_pos), glm::vec3(1.0f, 1.0f, 2.0f));
 
 	light_shader->Activate();
 	glad_glUniformMatrix4fv(glGetUniformLocation(light_shader->ID, "model"), 1, GL_FALSE, value_ptr(light_model));
