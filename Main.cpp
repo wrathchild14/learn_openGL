@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Mesh.h"
-
+#include <memory>
 constexpr int WIDTH = 1200;
 constexpr int HEIGHT = 1000;
 

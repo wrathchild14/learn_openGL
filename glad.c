@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glad/glad.h>
+#include <string.h> // Add this line to fix cmake
 
 static void* get_proc(const char* namez);
 
